@@ -1,6 +1,6 @@
 import { Box, Img } from "@chakra-ui/react";
 import ground from "/imgs/ground.png";
-import React, { SetStateAction, forwardRef, memo } from "react";
+import React, { forwardRef, memo } from "react";
 import Obstacles from "./Obstacles";
 
 interface Props {
@@ -14,13 +14,21 @@ const Ground = forwardRef<HTMLDivElement, Props>(
     return (
       <Box
         ref={ref}
-        width={"100%"}
+        width={"10000px"}
         position={"absolute"}
         bottom={0}
         display={"inline"}
       >
         <Box display={"inline-flex"}>
-          <Box width={"2500px"} height={"23px"}>
+          <Box width={"2500px"} height={"25px"}>
+            <Img
+              src={ground}
+              width={"100%"}
+              height={"100%"}
+              objectFit={"cover"}
+            />
+          </Box>
+          <Box width={"2500px"} height={"25px"}>
             <Img
               src={ground}
               width={"100%"}
@@ -44,15 +52,7 @@ const Ground = forwardRef<HTMLDivElement, Props>(
               objectFit={"cover"}
             />
           </Box>
-          ,
-          <Box width={"2500px"} height={"25px"}>
-            <Img
-              src={ground}
-              width={"100%"}
-              height={"100%"}
-              objectFit={"cover"}
-            />
-          </Box>
+
           <Obstacles
             obstaclePositions={obstaclePositions}
             updater={updater}

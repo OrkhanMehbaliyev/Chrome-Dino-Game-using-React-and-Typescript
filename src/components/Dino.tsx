@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { Img, ImgProps } from "@chakra-ui/react";
 import { DINO_STATES } from "../utils/types";
 
@@ -35,7 +35,6 @@ const Dino = forwardRef<HTMLImageElement, Props>(({ state, ...props }, ref) => {
       imgElement.src = dino_stationary;
     }
 
-    console.log(state);
     return () => {
       if (interval) clearInterval(interval);
     };

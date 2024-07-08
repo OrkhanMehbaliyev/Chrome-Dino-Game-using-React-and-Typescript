@@ -1,5 +1,4 @@
-import { Button, Flex, Heading } from "@chakra-ui/react";
-
+import { Flex, Heading } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { DINO_STATES } from "./utils/types";
 import WorldContainer from "./components/WorldContainer";
@@ -27,16 +26,26 @@ function App() {
     }
   };
 
-  const handleDedection = (pos: number) => {
-    // console.log(obstaclePositions);
-    // console.log(pos);
-    const cactiPos = obstaclePositions.map((x) => [x - 20, x + 20]);
+  const handleDedection = (position: number) => {
+    obstaclePositions.forEach((cactiPos) => {
+      if (
+        position >= cactiPos - 15 &&
+        position <= cactiPos + 15 &&
+        dinoRef.current &&
+        groundRef.current
+      ) {
+        const coordinates = dinoRef.current.getBoundingClientRect();
+        if (coordinates.y > groundRef.current.getBoundingClientRect().y - 60)
+          setDinoState(DINO_STATES.STATIC);
+      }
+    });
   };
 
   useEffect(() => {
     window.addEventListener("beforeunload", () => sessionStorage.clear(), {
       once: true,
     });
+
     window.addEventListener("keydown", handleStart, { once: true });
     window.addEventListener("keydown", handleJump);
 
@@ -54,11 +63,10 @@ function App() {
           let position = pos % 2500;
           --pos;
           groundRef.current.style.left = `${position * 3}px`;
-
-          // console.log(position);
           if (obstaclePositions.length > 0) {
-            handleDedection(-pos);
+            handleDedection(Math.abs(position * 3));
           }
+          // console.log(dinoRef.current?.getBoundingClientRect());
 
           if (position == 0) setUpdater((prev) => prev + 1);
           if (pos % 2000 == 0) setSpeed((prev) => prev / 1.1);
@@ -68,7 +76,7 @@ function App() {
 
       if (dinoState == DINO_STATES.JUMPING) {
         if (dinoRef.current) {
-          setDinoBottom("110px");
+          setDinoBottom("125px");
 
           setTimeout(() => {
             if (dinoRef.current) {
@@ -80,8 +88,6 @@ function App() {
           }, 250);
         }
       }
-
-      console.log(speed);
       return () => {
         sessionStorage.setItem("score", String(pos));
         clearInterval(interval);
@@ -98,13 +104,6 @@ function App() {
       alignItems={"center"}
     >
       <Heading ref={score}>Score : 0</Heading>
-      <Button
-        onClick={() => {
-          console.log(dinoRef.current?.getBoundingClientRect());
-        }}
-      >
-        Catch
-      </Button>
 
       <WorldContainer border={"3px solid gray"} overflowX={"hidden"}>
         <Dino
@@ -114,6 +113,7 @@ function App() {
           bottom={dinoBottom}
           width={"50px"}
           transition={"bottom 249ms ease"}
+          border={"1px solid blue"}
         />
         <Ground
           obstaclePositions={obstaclePositions}

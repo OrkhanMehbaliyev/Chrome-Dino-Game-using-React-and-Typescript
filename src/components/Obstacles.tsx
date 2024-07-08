@@ -13,16 +13,15 @@ const Obstacles: React.FC<Props> = ({
   obstaclePositions,
   setObstaclePositions,
 }) => {
-  const count = 10;
+  const count = Math.floor(3 + Math.random() * 10);
 
   const positions: number[] = [];
   useEffect(() => {
-    console.log("render obstacle");
     for (let i = 0; i < count; i++) {
-      const newNumber = 1000 + Math.floor(Math.random() * 6000);
+      const newNumber = 1500 + Math.floor(Math.random() * 6000);
       let flag = true;
       positions.forEach((position) => {
-        if (position <= newNumber + 150 && position >= newNumber - 150) {
+        if (position <= newNumber + 250 && position >= newNumber - 250) {
           flag = false;
         }
       });
@@ -30,11 +29,11 @@ const Obstacles: React.FC<Props> = ({
       else i--;
     }
 
-    setObstaclePositions(positions);
+    setObstaclePositions(positions.sort());
   }, [updater]);
 
   return (
-    <Box width={"3000px"}>
+    <Box width={"7500px"}>
       {obstaclePositions.map((position, key) => {
         return (
           <Img
@@ -45,6 +44,7 @@ const Obstacles: React.FC<Props> = ({
             position={"absolute"}
             bottom={"15px"}
             left={position}
+            border={"1px solid red"}
           />
         );
       })}
